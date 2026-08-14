@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090b10"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json"><title>FM26+</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="app">
+<header><div><span class="eyebrow">FOOTBALL MANAGEMENT COMPANION</span><h1>FM26<span>+</span></h1></div><div class="avatar">NV</div></header>
+<main>
+<section id="home" class="screen active">
+<div class="hero"><div><p class="muted">ASSISTANT MANAGER</p><h2>Construis ton mercato.<br><b>Domine ta carrière.</b></h2><p class="sub">Ton cockpit pour préparer chaque décision.</p></div><div class="ball">⚽</div></div>
+<div class="club-card"><div><div class="muted">MON CLUB</div><h3>Angers SCO</h3><p>Budget mercato <strong>18,5 M€</strong> · Saison 2026/27</p></div><div class="badge">SCO</div></div>
+<h3 class="section-title">Outils</h3>
+<div class="grid">
+<button class="tile" onclick="show('mercato')"><b>💰</b><strong>Mercato</strong><small>Négocier un transfert</small></button>
+<button class="tile" onclick="show('scouting')"><b>🔎</b><strong>Scouting</strong><small>Trouver les pépites</small></button>
+<button class="tile" onclick="show('ia')"><b>🧠</b><strong>IA Manager</strong><small>Analyser un match</small></button>
+<button class="tile" onclick="show('tactique')"><b>📋</b><strong>Tactique</strong><small>Construire ton XI</small></button>
+<button class="tile" onclick="show('effectif')"><b>📊</b><strong>Effectif</strong><small>Voir les besoins</small></button>
+<button class="tile" onclick="show('comparateur')"><b>⚔️</b><strong>Comparateur</strong><small>Deux joueurs face à face</small></button>
+</div>
+<div class="result"><b>💡 Conseil du jour</b><br>Ne dépense pas tout ton budget sur un seul joueur : garde une réserve pour les salaires, bonus et opportunités de fin de mercato.</div>
+</section>
+
+<section id="mercato" class="screen"><button class="back" onclick="show('home')">‹ Accueil</button><h2>Assistant Mercato</h2><p class="muted">Une estimation pour cadrer ta négociation.</p>
+<div class="form">
+<label>Budget disponible<input id="budget" type="number" value="18.5" step=".1"><small>M€</small></label>
+<label>Valeur estimée du joueur<input id="value" type="number" value="12" step=".1"><small>M€</small></label>
+<label>Réputation du vendeur<select id="rep"><option value=".9">Petit club</option><option value="1" selected>Club moyen</option><option value="1.2">Gros club</option></select></label>
+<label>Urgence du recrutement<select id="urgency"><option value=".96">Faible</option><option value="1" selected>Normale</option><option value="1.08">Élevée</option></select></label>
+<button class="primary" onclick="calc()">Analyser l'offre</button></div><div id="offer" class="result"></div></section>
+
+<section id="scouting" class="screen"><button class="back" onclick="show('home')">‹ Accueil</button><h2>Scouting</h2><p class="muted">Base de démonstration — remplaçable par tes données.</p>
+<input id="searchPlayer" oninput="filterPlayers()" placeholder="🔎 Nom du joueur...">
+<div class="filters"><select id="posFilter" onchange="filterPlayers()"><option value="all">Tous les postes</option><option value="ATT">Attaquant</option><option value="MIL">Milieu</option><option value="DEF">Défenseur</option></select>
+<input id="ageMax" oninput="filterPlayers()" type="number" value="23" min="15" max="40" placeholder="Âge max"></div>
+<div class="filters"><input id="potMin" oninput="filterPlayers()" type="number" value="80" min="1" max="100" placeholder="Potentiel min"><input id="valueMax" oninput="filterPlayers()" type="number" value="20" min="0" placeholder="Valeur max"></div>
+<div id="players"></div></section>
+
+<section id="comparateur" class="screen"><button class="back" onclick="show('home')">‹ Accueil</button><h2>Comparateur</h2><p class="muted">Choisis deux profils pour voir lequel correspond le mieux à ton projet.</p>
+<div class="form"><label>Joueur A<select id="p1" onchange="comparePlayers()"></select></label><label>Joueur B<select id="p2" onchange="comparePlayers()"></select></label></div>
+<div id="compare" class="result"></div></section>
+
+<section id="effectif" class="screen"><button class="back" onclick="show('home')">‹ Accueil</button><h2>Analyse d'effectif</h2><p class="muted">Diagnostic automatique à partir de ton profil de club.</p>
+<div class="stats"><div><b>7.4</b><small>XI moyen</small></div><div><b>84</b><small>Potentiel jeunes</small></div><div><b>18,5 M€</b><small>Budget</small></div></div>
+<button class="primary" onclick="analyzeSquad()">Lancer le diagnostic</button><div id="squadResult" class="result"></div></section>
+
+<section id="ia" class="screen"><button class="back" onclick="show('home')">‹ Accueil</button><h2>IA Manager</h2><p class="muted">Décris ton adversaire ou ton problème.</p>
+<textarea id="problem" placeholder="Ex : je joue contre une équipe plus forte en 4-3-3 et mes ailes sont rapides..."></textarea>
+<button class="primary" onclick="coach()">Analyser</button><div id="coach" class="result"></div></section>
+
+<section id="tactique" class="screen"><button class="back" onclick="show('home')">‹ Accueil</button><h2>Constructeur tactique</h2>
+<div class="form"><label>Formation<select><option>4-2-3-1</option><option>4-3-3</option><option>4-4-2</option><option>3-4-2-1</option><option>5-3-2</option></select></label><label>Style<select><option>Transitions rapides</option><option>Possession</option><option>Pressing haut</option><option>Bloc bas</option></select></label></div>
+<div class="pitch"><div class="line">4-2-3-1</div><div class="players-pitch"><i>ST</i><i>LW</i><i>AM</i><i>RW</i><i>CM</i><i>CM</i><i>LB</i><i>CB</i><i>CB</i><i>RB</i><i>GK</i></div></div>
+<div class="result"><b>🎯 Conseil :</b> si tes ailiers sont rapides, cherche les transitions derrière les latéraux adverses et évite de faire monter les deux latéraux en même temps.</div></section>
+</main>
+<nav><button onclick="show('home')">⌂<span>Accueil</span></button><button onclick="show('scouting')">⌕<span>Scouting</span></button><button onclick="show('mercato')">€<span>Mercato</span></button><button onclick="show('ia')">✦<span>IA</span></button></nav>
+</div><script src="app.js"></script></body></html>
