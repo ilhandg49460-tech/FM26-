@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080a0f"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json"><title>FM26+</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="app">
+<header><div><span class="eyebrow">FOOTBALL MANAGEMENT COMPANION</span><h1>FM26<span>+</span></h1></div><div class="avatar">NV</div></header>
+<main>
+<section id="home" class="screen active">
+<div class="hero"><span class="pill">V3 • DIRECTOR SPORTIF</span><h2>Chaque décision.<br><b>Plus intelligente.</b></h2><p>Mercato, scouting, effectif et tactique réunis dans un seul cockpit.</p></div>
+<div class="club-card"><div><span class="muted">MON CLUB</span><h3 id="clubName">Angers SCO</h3><p><strong id="clubBudget">18,5 M€</strong> de budget · <span id="clubRep">Réputation 3/5</span></p></div><div class="badge" id="clubBadge">SCO</div></div>
+<h3 class="section-title">Outils</h3><div class="grid">
+<button class="tile" onclick="show('club')"><b>🏟️</b><strong>Mon Club</strong><small>Configurer ma carrière</small></button>
+<button class="tile" onclick="show('scouting')"><b>🔎</b><strong>Scouting</strong><small>Trouver le bon profil</small></button>
+<button class="tile" onclick="show('mercato')"><b>💰</b><strong>Mercato</strong><small>Négocier intelligemment</small></button>
+<button class="tile" onclick="show('effectif')"><b>📊</b><strong>Effectif</strong><small>Détecter les besoins</small></button>
+<button class="tile" onclick="show('ia')"><b>🧠</b><strong>IA Manager</strong><small>Préparer le match</small></button>
+<button class="tile" onclick="show('tactique')"><b>📋</b><strong>Tactique</strong><small>Construire ton XI</small></button>
+</div>
+<div class="result"><b>🎯 Priorité actuelle</b><br><span id="homeAdvice">Renforcer la défense centrale et conserver une marge de budget pour une opportunité de fin de mercato.</span></div>
+</section>
+
+<section id="club" class="screen"><button class="back" onclick="show('home')">‹ Accueil</button><h2>Mon Club</h2><p class="muted">Choisis ton championnat puis ton club.</p>
+<div class="form"><label>Championnat<select id="leagueSelect" onchange="populateClubs()"></select></label>
+<label>Rechercher un club<input id="clubSearch" oninput="populateClubs()" placeholder="🔎 Nom du club"></label>
+<label>Club<select id="clubSelect" onchange="updateClub()"></select></label>
+<label>Objectif<select id="objective" onchange="saveClub()"><option>Se maintenir</option><option selected>Milieu de tableau</option><option>Top 8</option><option>Europe</option><option>Titre</option></select></label>
+<label>Masse salariale disponible<input id="wage" type="number" value="85"><small>k€/mois</small></label>
+<button class="primary" onclick="saveClub()">Enregistrer mon club</button></div><div id="clubResult" class="result">Sélectionne ton club pour personnaliser FM26+.</div></section>
+
+<section id="scouting" class="screen"><button class="back" onclick="show('home')">‹ Accueil</button>
+<h2>Scouting réel</h2><p class="muted">Base publique réelle · référence carrière 2025.</p>
+<div class="result"><b>🌍 5 grands championnats</b><br>Premier League · La Liga · Serie A · Bundesliga · Ligue 1<br><small>V9 utilise directement le stockage public du dataset Transfermarkt et garde les données côté serveur après le premier chargement.</small></div>
+<div class="form">
+<input id="realSearch" placeholder="🔎 Nom du joueur">
+<div class="filters"><select id="realLeague"><option value="all">5 championnats</option><option value="GB1">Premier League</option><option value="ES1">La Liga</option><option value="IT1">Serie A</option><option value="L1">Bundesliga</option><option value="FR1">Ligue 1</option></select>
+<select id="realPos"><option value="all">Tous les postes</option><option value="Goalkeeper">Gardien</option><option value="Defender">Défenseur</option><option value="Midfield">Milieu</option><option value="Attack">Attaquant</option></select></div>
+<div class="filters"><input id="realAge" type="number" value="35" placeholder="Âge max"><input id="realValue" type="number" value="250" placeholder="Valeur max M€"></div>
+<button class="primary" onclick="searchRealDB()">Rechercher</button></div>
+<div id="dbStatus" class="result">API non testée.</div><div id="realPlayers"></div></section>
+
+<section id="mercato" class="screen"><button class="back" onclick="show('home')">‹ Accueil</button><h2>Assistant Mercato</h2><p class="muted">Transforme une valeur en stratégie de négociation.</p>
+<div class="form"><label>Valeur estimée<input id="mv" type="number" value="12" step=".1"><small>M€</small></label><label>Réputation vendeur<select id="seller"><option value=".88">Petit club</option><option value="1" selected>Club moyen</option><option value="1.16">Gros club</option></select></label><label>Âge du joueur<select id="playerAge"><option value=".9">18–20 ans</option><option value="1">21–25 ans</option><option value="1.08">26–29 ans</option><option value=".94">30+ ans</option></select></label><label>Concurrence<select id="competition"><option value=".97">Faible</option><option value="1" selected>Normale</option><option value="1.1">Forte</option></select></label><button class="primary" onclick="negotiate()">Construire l'offre</button></div><div id="deal" class="result"></div></section>
+
+<section id="effectif" class="screen"><button class="back" onclick="show('home')">‹ Accueil</button><h2>Analyse d'effectif</h2><p class="muted">Choisis ton niveau actuel et laisse FM26+ hiérarchiser les besoins.</p>
+<div class="form"><label>Niveau gardien<select id="gk"><option>Faible</option><option selected>Moyen</option><option>Fort</option></select></label><label>Défense centrale<select id="cb"><option selected>Faible</option><option>Moyen</option><option>Fort</option></select></label><label>Milieu<select id="mid"><option>Faible</option><option selected>Moyen</option><option>Fort</option></select></label><label>Attaque<select id="att"><option>Faible</option><option>Moyen</option><option selected>Fort</option></select></label><button class="primary" onclick="analyze()">Analyser l'effectif</button></div><div id="analysis" class="result"></div></section>
+
+<section id="ia" class="screen"><button class="back" onclick="show('home')">‹ Accueil</button><h2>IA Manager</h2><p class="muted">Prépare un match ou résous un problème tactique.</p>
+<div class="form"><label>Adversaire<select id="opp"><option>4-3-3 possession</option><option>4-2-3-1 pressing</option><option>5-3-2 bloc bas</option><option>4-4-2 transitions</option></select></label><textarea id="problem" placeholder="Ton problème : blessures, manque de rythme, ailes fortes, difficulté à ressortir..."></textarea><button class="primary" onclick="coach()">Préparer le match</button></div><div id="coachResult" class="result"></div></section>
+
+<section id="tactique" class="screen"><button class="back" onclick="show('home')">‹ Accueil</button><h2>Constructeur tactique</h2><div class="form"><label>Formation<select id="formation" onchange="updatePitch()"><option>4-2-3-1</option><option>4-3-3</option><option>4-4-2</option><option>3-4-2-1</option><option>5-3-2</option></select></label><label>Style<select><option>Transitions rapides</option><option>Possession</option><option>Pressing haut</option><option>Bloc bas</option></select></label></div><div class="pitch"><div id="formationLabel" class="line">4-2-3-1</div><div class="players-pitch"><i>ST</i><i>LW</i><i>AM</i><i>RW</i><i>CM</i><i>CM</i><i>LB</i><i>CB</i><i>CB</i><i>RB</i><i>GK</i></div></div><div class="result"><b>🎯 Conseil</b><br>Adapte la hauteur du bloc et le pressing à la qualité de sortie de balle adverse. Une bonne structure vaut mieux qu'une tactique trop compliquée.</div></section>
+</main>
+<nav><button onclick="show('home')">⌂<span>Accueil</span></button><button onclick="show('scouting')">⌕<span>Scouting</span></button><button onclick="show('mercato')">€<span>Mercato</span></button><button onclick="show('ia')">✦<span>IA</span></button></nav>
+</div><script src="app.js"></script></body></html>
