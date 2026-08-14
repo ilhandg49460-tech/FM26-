@@ -35,7 +35,7 @@ module.exports=async(req,res)=>{
   const maxAge=+(req.query.age||35),maxValue=(+(req.query.value||250))*1e6;
   let list=data.filter(p=>(lg==='all'||p.current_club_domestic_competition_id===lg)&&(po==='all'||p.position===po)&&p._age<=maxAge&&(+p.market_value_in_eur||0)<=maxValue&&(!q||p.name.toLowerCase().includes(q)));
   list.sort((a,b)=>(+b.market_value_in_eur||0)-(+a.market_value_in_eur||0));
-  const players=list.slice(0,100).map(p=>({id:p.player_id,name:p.name,position:p.position,age:p._age,nationality:p.country_of_citizenship||'',foot:p.foot||'',value:+p.market_value_in_eur||0,rating:p._rating,clubId:p.current_club_id||''}));
+  const players=list.slice(0,100).map(p=>({id:p.player_id,name:p.name,position:p.position,age:p._age,nationality:p.country_of_citizenship||'',foot:p.foot||'',value:+p.market_value_in_eur||0,rating:p._rating,clubId:p.current_club_id||'',club:p.current_club_name||''}));
   res.setHeader('Cache-Control','s-maxage=86400, stale-while-revalidate=604800');
   res.status(200).json({ok:true,source:'transfermarkt-datasets R2',referenceDate:'2025-07-01',count:players.length,players});
  }catch(e){res.status(502).json({ok:false,error:e.message})}
