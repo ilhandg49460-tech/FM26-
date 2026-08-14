@@ -1,0 +1,1 @@
+module.exports=async(req,res)=>{res.status(200).json({ok:true,service:'FM26+ API',version:'V8'})}
